@@ -1,0 +1,35 @@
+.card_dislike {
+  width: 20px;
+  height: 20px;
+  background-image: url(../../../images/me_gusta.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px 20px;
+  transition: all 1s;
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+}
+.card_like {
+  background-image: url(../../../images/me_gusta_negro.svg);
+}
+.card_dislike:hover,
+.card_like:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+  transition: all 0.8s;
+  opacity: 0.6;
+  overflow: hidden;
+  -webkit-transition: all 0.8s;
+  -moz-transition: all 0.8s;
+  -ms-transition: all 0.8s;
+  -o-transition: all 0.8s;
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+}
+
+
+
