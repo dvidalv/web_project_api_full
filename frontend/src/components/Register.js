@@ -13,6 +13,9 @@ function Register({ setMessage, message }) {
     email: '',
     password: '',
     confirmPassword: '',
+    name: 'Jacques Cousteau',
+    about: 'Explorador',
+    avatar: 'https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg',
   });
 
   useEffect(() => {
@@ -20,10 +23,14 @@ function Register({ setMessage, message }) {
       setTimeout(() => {
         setPopOpenSuccess(false);
         setFormData({
+          name: '',
+          about: '',
+          avatar: '',
           email: '',
           password: '',
-          confirmPassword: '',
+
         });
+
         history.push('/signin');
       }, 3000);
     }
@@ -31,11 +38,12 @@ function Register({ setMessage, message }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const { email, password, confirmPassword } = formData;
+    const { name, about, avatar, email, password, confirmPassword } = formData;
     if (password === confirmPassword) {
-      register(password, email)
+
+      register(name, about, avatar, email, password)
         .then((res) => {
-          if (res.data.email) {
+          if (res.user.email) {
             setMessage('Registro exitoso');
             setPopOpenSuccess(true);
             setError('');
@@ -46,7 +54,8 @@ function Register({ setMessage, message }) {
           }
         })
         .catch((err) => {
-          setMessage('Error al registrar');
+          console.log(err);
+          setMessage('Error al Registrar');
           setPopOpenFail(true);
         });
       setError('');
@@ -84,6 +93,7 @@ function Register({ setMessage, message }) {
             className="register__input"
             name="password"
             type="password"
+            minLength="6"
             placeholder="Contraseña"
             value={formData.password}
             onChange={handleChange}
@@ -91,10 +101,38 @@ function Register({ setMessage, message }) {
           <input
             className="register__input"
             name="confirmPassword"
+            minLength="6"
             type="password"
             placeholder="Repite la contraseña"
             value={formData.confirmPassword}
             onChange={handleChange}
+          />
+          <input
+            className="register__input"
+            name="name"
+            type="text"
+            placeholder="Nombre"
+            value={formData.name}
+            onChange={handleChange}
+
+          />
+          <input
+            className="register__input"
+            name="about"
+            type="text"
+            placeholder="About"
+            value={formData.about}
+            onChange={handleChange}
+
+          />
+          <input
+            className="register__input"
+            name="avatar"
+            type="url"
+            placeholder="Avatar"
+            value={formData.avatar}
+            onChange={handleChange}
+
           />
           {error ? <Error error={error} /> : null}
           <button className="register__button">Regístrate</button>

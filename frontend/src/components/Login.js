@@ -5,7 +5,7 @@ import { useEffect, useState, useContext } from 'react';
 import { authorize } from '../utils/auth';
 
 function Login({ setLoggedIn, setMessage, message }) {
-  const { setIsMobileOpen, isMobileOpen } = useContext(CurrentUserContext);
+  const { setIsMobileOpen } = useContext(CurrentUserContext);
 
   const history = useHistory();
   const [formData, setFormData] = useState({

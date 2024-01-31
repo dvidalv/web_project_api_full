@@ -4,7 +4,8 @@ class Api {
 	constructor() {
 		this.groupId = 'web_es_09';
 		this._token = token;
-		this._url = `https://around.nomoreparties.co/v1/${this.groupId}/`;
+		// this._url = `https://around.nomoreparties.co/v1/${this.groupId}/`;
+    this._url = 'http://localhost:3000';
 	}
 	async fetchData(url, method, data) {
 		try {
@@ -26,11 +27,11 @@ class Api {
 			throw error;
 		}
 	}
-	
+
 	async getUserInfo() {
 		return await this.fetchData(`${this._url}users/me`, 'GET');
 	}
-	
+
 	async getInitialCards(resource) {
 		return await this.fetchData(`${this._url}${resource}`, 'GET');
 	}
@@ -46,8 +47,8 @@ class Api {
 	async patchUserInfo(data) {
 		return await this.fetchData(`${this._url}users/me`, 'PATCH', data);
 	}
-	async addCard(data) {
-		return await this.fetchData(`${this._url}cards`, 'POST', data);
+	async addCard(newCard) {
+		return await this.fetchData(`${this._url}cards`, 'POST', newCard);
 	}
 
 	async deleteCard(resource, card_Id) {

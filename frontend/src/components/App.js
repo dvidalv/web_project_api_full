@@ -3,7 +3,6 @@ import Header from './Header';
 import Footer from './Footer';
 import { useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
-// import Api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -13,7 +12,6 @@ import DeletePopup from './DeletePopup';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
-import ErrorPage from './ErrorPage';
 import { checkToken } from '../utils/auth';
 import { AnimatePresence } from 'framer-motion';
 
@@ -38,6 +36,7 @@ function App() {
     const tokenCheck = async () => {
       const token = localStorage.getItem('token');
       if (token) {
+        console.log(token)
         try {
           // setIsLoading(false);
           const tokenIsValid = await checkToken(token);
@@ -75,17 +74,17 @@ function App() {
   };
 
   // get user info
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const userData = await api.getUserInfo('users/me');
-        setCurrentUser(userData);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchUserInfo();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     try {
+  //       const userData = await api.getUserInfo('users/me');
+  //       setCurrentUser(userData);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchUserInfo();
+  // }, []);
 
   // Cerrar sesión
   const cerrarSesion = () => {
@@ -169,13 +168,18 @@ function App() {
     closeAllPopups();
   };
 
+  // Function to handle the submission of a new place
   const handleAddPlaceSubmit = async (card) => {
     try {
+      // Call the API to add the new card
       const newCard = await api.addCard(card);
+      // Update the state of cards by adding the new card to the existing list
       setCards([newCard, ...cards]);
     } catch (error) {
+      // Log any error that occurs during the process
       console.log(error);
     }
+    // Close all popups after the card has been added
     closeAllPopups();
   };
 

@@ -32,6 +32,7 @@ const getCardById = async (req, res) => {
   let card;
   try {
     const { cardId } = req.params;
+    console.log(cardId)
     card = await Card.findById(cardId).orFail();
     return card;
   } catch (err) {

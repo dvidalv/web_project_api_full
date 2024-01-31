@@ -1,22 +1,31 @@
-const httpStatus = require('http-status');
-const User = require('../models/user');
+const httpStatus = require('http-status'); // Importamos el módulo http-status
+const { User } = require('../models/user'); // Importamos el modelo de usuarios
+const bcrypt = require('bcryptjs'); // Importamos bcryptjs
 
 const createUser = async (req, res) => {
   try {
-    const { name, about, avatar } = req.body;
+    const { name, about, avatar, email, password } = req.body; // Obtenemos los datos del usuario del body de la petición
     const newUser = {
+      // Creamos un nuevo usuario
       name,
       about,
       avatar,
+      email,
+      password,
     };
-    const user = await User.create(newUser);
+    const hash = await bcrypt.hash(newUser.password, 10); // Hash password
+    newUser.password = hash; // Asignamos la contraseña hasheada al usuario
+    console.log(newUser);
+    const user = await User.create(newUser); // Creamos el usuario en la base de datos
+
     return res.status(httpStatus.CREATED).json({
+      // Devolvemos el usuario creado
       status: 'success',
       message: 'User created',
       user,
     });
   } catch (err) {
-    console.log(err);
+    // Si hay un error en la creación del usuario lo capturamos aquí y devolvemos un error
     if (err.name === 'ValidationError') {
       return res.status(httpStatus.BAD_REQUEST).json({
         status: 'error',
@@ -26,6 +35,24 @@ const createUser = async (req, res) => {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       status: 'error',
       message: 'Unexpected error',
+    });
+  }
+};
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body; // Obtenemos los datos del usuario del body de la petición
+    const user = await User.findUserByCredentials(email, password); // Buscamos el usuario por email y contraseña
+    const token = await generateAuthToken(user); // Generamos el token
+    return res.status(httpStatus.OK).json({ // Devolvemos el usuario y el token
+      status: 'success',
+      message: 'User logged in',
+      token,
+    });
+  } catch (err) {
+    // console.log(err);
+    return res.status(httpStatus.UNAUTHORIZED).json({
+      status: 'error',
+      message: 'Invalid credentials',
     });
   }
 };
@@ -171,6 +198,15 @@ const updateAvatar = async (req, res) => {
   }
 };
 
+const generateAuthToken = async (user) => {
+  const token = await jwt.sign(
+    { _id: user._id.toString() },
+    process.env.JWT_SECRET,
+  );
+  return token;
+};
+
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -178,4 +214,6 @@ module.exports = {
   deleteUser,
   updateProfile,
   updateAvatar,
+  login,
+  generateAuthToken,
 };

@@ -5,6 +5,7 @@ const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
 const { requestLogger } = require('./middlewares/logger');
 require('dotenv').config();
+cors = require('cors');
 
 const app = express();
 
@@ -27,19 +28,20 @@ app.use(requestLogger); // registrar todas las solicitudes HTTP
 
 // MIDDLEWARES
 app.use(morgan('dev'));
+
 app.use(express.json());
 
-// add user to req object
-app.use((req, res, next) => {
-  req.user = {
-    _id: '65888d350085018635d99c8b',
-  };
-  next();
-});
+app.use(
+  cors({
+    origin: ['http://localhost:3001', 'https://www.alrededorusa.mooo.com'], // solo estos dominios pueden acceder a la API
+    credentials: true,
+  }),
+);
 
 // ROUTES
-app.use('/cards', cardsRouter);
-app.use('/users', usersRouter);
+app.use('/', cardsRouter);
+app.use('/signup', usersRouter);
+// app.use('/users', usersRouter);
 
 // app.use(errorLogger); // registrar errores HTTP
 

@@ -1,23 +1,21 @@
-export const BASE_URL = 'https://register.nomoreparties.co';
-
-let isLoggedIn = false;
-export const getIsLoggedIn = () => isLoggedIn;
-export const setIsLoggedIn = (value) => {
-	return (isLoggedIn = value);
-};
+export const BASE_URL = 'http://localhost:3000';
 
 // Registrar un nuevo usuario
-export const register = (password, email) => {
+export const register = (name, about, avatar, email, password) => {
 	return fetch(`${BASE_URL}/signup`, {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ password, email }),
-	}).then((response) => {
-		return response.json();
-	});
+		body: JSON.stringify({ name, about, avatar, email, password }),
+	})
+    .then((response) => response.json())
+    .then((res) => {
+      return res;
+    })
+    // .catch((err) => console.log(err));
+
 };
 
 //login and get token
