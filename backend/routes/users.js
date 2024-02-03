@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { validateUser } = require('../models/user');
+const authenticateToken = require('../middlewares/auth');
 
 const {
   getAllUsers,
@@ -8,14 +9,22 @@ const {
   deleteUser,
   updateProfile,
   updateAvatar,
+  login,
+  getCurrentUser,
 } = require('../controllers/users');
 
 const router = Router();
 
-router.route('/').get(getAllUsers);
-router.route('/').post(createUser);
-router.route('/me').patch(updateProfile);
-router.route('/me/avatar').patch(updateAvatar);
-router.route('/:id').get(getUserById).delete(deleteUser);
+router.get('/', getAllUsers);
+
+router.post('/signin', login);
+
+router.post('/signup', validateUser, createUser);
+
+router.route('/me').get(getCurrentUser).patch(updateProfile);
+
+router.patch('/me/avatar', authenticateToken, updateAvatar);
+
+router.get('/:id', authenticateToken, getUserById).delete('/:id', deleteUser);
 
 module.exports = router;

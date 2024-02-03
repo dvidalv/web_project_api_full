@@ -4,13 +4,14 @@ const mongoose = require('mongoose');
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
 const { requestLogger } = require('./middlewares/logger');
+const authMiddleware = require('./middlewares/auth');
+
 require('dotenv').config();
 cors = require('cors');
 
 const app = express();
 
 // conéctate al servidor MongoDB
-
 mongoose.connect('mongodb://localhost:27017/aroundb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -31,16 +32,23 @@ app.use(morgan('dev'));
 
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: ['http://localhost:3001', 'https://www.alrededorusa.mooo.com'], // solo estos dominios pueden acceder a la API
-    credentials: true,
-  }),
-);
+   // Opciones de CORS para permitir solicitudes de ciertos orígenes
+   const corsOptions = {
+    origin: ['http://localhost:3000', 'http://localhost:3001'], // Asegúrate de incluir aquí el origen de tu frontend
+    credentials: true, // Para permitir cookies de sesión en las solicitudes entre dominios
+  };
 
-// ROUTES
-app.use('/', cardsRouter);
-app.use('/signup', usersRouter);
+  app.use(cors(corsOptions));
+
+// Rutas publicas
+app.use('/users',  usersRouter);
+
+// Rutas protegidas
+app.use('/cards', authMiddleware, cardsRouter);
+// app.use('/cards', cardsRouter);
+
+
+//demas rutas
 // app.use('/users', usersRouter);
 
 // app.use(errorLogger); // registrar errores HTTP

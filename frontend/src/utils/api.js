@@ -1,11 +1,11 @@
-const token = '9d080c9f-32ec-43d7-9e8d-be1fdad6fe1b';
+// const token = '9d080c9f-32ec-43d7-9e8d-be1fdad6fe1b';
 
 class Api {
 	constructor() {
-		this.groupId = 'web_es_09';
-		this._token = token;
+		// this.groupId = 'web_es_09';
+		// this._token = token;
 		// this._url = `https://around.nomoreparties.co/v1/${this.groupId}/`;
-    this._url = 'http://localhost:3000';
+    this._url = 'http://localhost:3000/';
 	}
 	async fetchData(url, method, data) {
 		try {

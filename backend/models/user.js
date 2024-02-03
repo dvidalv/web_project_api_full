@@ -55,7 +55,7 @@ const userSchema = new Schema({
       validator(v) {
         return Joi.attempt(v, Joi.string().uri(), 'Debe ser una URL válida');
       },
-      message: 'Debe ser una URL válida',
+      message: 'Debe ser una UR@L válida',
     },
   },
   email: {

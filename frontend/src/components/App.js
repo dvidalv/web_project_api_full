@@ -36,9 +36,8 @@ function App() {
     const tokenCheck = async () => {
       const token = localStorage.getItem('token');
       if (token) {
-        console.log(token)
         try {
-          // setIsLoading(false);
+          setIsLoading(true);
           const tokenIsValid = await checkToken(token);
           if (tokenIsValid) {
             setUserData(tokenIsValid);
@@ -48,16 +47,16 @@ function App() {
             history.push('/');
           } else {
             setLoggedIn(false);
-            history.push('/signin');
+            history.push('/users/signin');
           }
         } catch (error) {
           setLoggedIn(false);
-          history.push('/signin');
+          history.push('/users/signin');
         }
       } else {
         setLoggedIn(false);
         setIsLoading(false);
-        history.push('/signin');
+        history.push('/users/signin');
       }
     };
     tokenCheck();
@@ -74,17 +73,17 @@ function App() {
   };
 
   // get user info
-  // useEffect(() => {
-  //   const fetchUserInfo = async () => {
-  //     try {
-  //       const userData = await api.getUserInfo('users/me');
-  //       setCurrentUser(userData);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchUserInfo();
-  // }, []);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userData = await api.getUserInfo('/users/me');
+        setCurrentUser(userData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
   // Cerrar sesión
   const cerrarSesion = () => {
@@ -92,7 +91,7 @@ function App() {
     setLoggedIn(false);
     setUserData({});
     setIsMobileOpen(false);
-    history.push('/signin');
+    history.push('/users/signin');
   };
 
   async function handleCardLike(card) {
@@ -201,10 +200,10 @@ function App() {
       >
         <Header onCerrarSession={cerrarSesion} />
         <Switch>
-          <Route path="/signup">
+          <Route path="/users/signup">
             <Register message={message} setMessage={setMessage} />
           </Route>
-          <Route path="/signin">
+          <Route path="/users/signin">
             <Login
               setLoggedIn={setLoggedIn}
               message={message}

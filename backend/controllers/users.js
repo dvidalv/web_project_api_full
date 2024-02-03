@@ -1,6 +1,23 @@
+const jwt = require('jsonwebtoken');
 const httpStatus = require('http-status'); // Importamos el módulo http-status
 const { User } = require('../models/user'); // Importamos el modelo de usuarios
 const bcrypt = require('bcryptjs'); // Importamos bcryptjs
+
+const getCurrentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id); // Buscamos el usuario por id
+    return res.status(httpStatus.OK).json({
+      status: 'success',
+      message: 'User found',
+      user,
+    });
+  } catch (err) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      status: 'error',
+      message: 'Unexpected error',
+    });
+  }
+};
 
 const createUser = async (req, res) => {
   try {
@@ -15,7 +32,6 @@ const createUser = async (req, res) => {
     };
     const hash = await bcrypt.hash(newUser.password, 10); // Hash password
     newUser.password = hash; // Asignamos la contraseña hasheada al usuario
-    console.log(newUser);
     const user = await User.create(newUser); // Creamos el usuario en la base de datos
 
     return res.status(httpStatus.CREATED).json({
@@ -38,23 +54,33 @@ const createUser = async (req, res) => {
     });
   }
 };
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body; // Obtenemos los datos del usuario del body de la petición
     const user = await User.findUserByCredentials(email, password); // Buscamos el usuario por email y contraseña
     const token = await generateAuthToken(user); // Generamos el token
+
     return res.status(httpStatus.OK).json({ // Devolvemos el usuario y el token
       status: 'success',
       message: 'User logged in',
       token,
     });
   } catch (err) {
-    // console.log(err);
     return res.status(httpStatus.UNAUTHORIZED).json({
       status: 'error',
       message: 'Invalid credentials',
     });
   }
+};
+
+const generateAuthToken = async (user) => { // Función para generar el token
+  const token = await jwt.sign( // Generamos el token con jwt.sign
+    { _id: user._id.toString() }, // Pasamos el id del usuario o carga útil
+    process.env.JWT_SECRET, // Pasamos el secret del token
+    { expiresIn: '7d' }, // Token now expires in one week
+  );
+  return token; // Devolvemos el token
 };
 
 const getAllUsers = async (req, res) => {
@@ -168,7 +194,7 @@ const updateProfile = async (req, res) => {
 const updateAvatar = async (req, res) => {
   try {
     const { avatar } = req.body;
-    console.log(req.user._id);
+
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { avatar },
@@ -193,19 +219,11 @@ const updateAvatar = async (req, res) => {
     console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       status: 'error',
+      
       message: 'Unexpected error',
     });
   }
 };
-
-const generateAuthToken = async (user) => {
-  const token = await jwt.sign(
-    { _id: user._id.toString() },
-    process.env.JWT_SECRET,
-  );
-  return token;
-};
-
 
 module.exports = {
   getAllUsers,
@@ -216,4 +234,5 @@ module.exports = {
   updateAvatar,
   login,
   generateAuthToken,
+  getCurrentUser,
 };

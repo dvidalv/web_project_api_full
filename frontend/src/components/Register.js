@@ -31,7 +31,7 @@ function Register({ setMessage, message }) {
 
         });
 
-        history.push('/signin');
+        history.push('/users/signin');
       }, 3000);
     }
   }, [popOpenSuccess, history]);
@@ -137,7 +137,7 @@ function Register({ setMessage, message }) {
           {error ? <Error error={error} /> : null}
           <button className="register__button">Regístrate</button>
           <p className="register__subtitle">
-            ¿Ya eres miembro? Inicia sesión {<Link to={'/signin'}>aquí</Link>}
+            ¿Ya eres miembro? Inicia sesión {<Link to={'/users/signin'}>aquí</Link>}
           </p>
         </form>
         <InfoTooltip

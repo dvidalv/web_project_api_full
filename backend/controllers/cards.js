@@ -5,7 +5,7 @@ const Card = require('../models/card');
 // GET /cards — devuelve todas las tarjetas
 const getAllCards = async (req, res) => {
   try {
-    const cards = await Card.find({});
+    const cards = await Card.find({}); // devuelve todas las tarjetas
     res.status(httpStatus.OK).send(cards);
   } catch (err) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
@@ -32,7 +32,7 @@ const getCardById = async (req, res) => {
   let card;
   try {
     const { cardId } = req.params;
-    console.log(cardId)
+
     card = await Card.findById(cardId).orFail();
     return card;
   } catch (err) {

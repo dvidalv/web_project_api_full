@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const authenticateToken = require('../middlewares/auth');
 
 const {
   getAllCards,

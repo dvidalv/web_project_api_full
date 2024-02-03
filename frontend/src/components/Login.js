@@ -15,25 +15,36 @@ function Login({ setLoggedIn, setMessage, message }) {
   const [popOpenFail, setPopOpenFail] = useState(false);
   const [popOpenSuccess, setPopOpenSuccess] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const { email, password } = formData;
-    authorize(password, email)
-      .then((res) => {
-        if (res.token) {
-          setMessage('Inicio de sesión exitoso');
-          localStorage.setItem('token', res.token);
-          setPopOpenSuccess(true);
-          setIsMobileOpen(false);
-        }
-      })
-      .catch((err) => {
-        setPopOpenFail(true);
-      });
+    try {
+      const res = await authorize(email, password);
+      if (res.token) {
+        const response = await fetch('http://localhost:3000/users/me', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${res.token}`,
+          },
+        });
+        const userData = await response.json();
+        setMessage(`Bienvenido, ${userData.name}`);
+        localStorage.setItem('user', JSON.stringify(userData));
+        setMessage('Inicio de sesión exitoso');
+        localStorage.setItem('token', res.token);
+        setPopOpenSuccess(true);
+        setIsMobileOpen(false);
+      }
+    } catch (err) {
+      setPopOpenFail(true);
+    }
   }
+
   useEffect(() => {
     if (popOpenSuccess) {
-      // setTimeout(() => {
+      setTimeout(() => {
       setPopOpenSuccess(false);
       setFormData({
         email: '',
@@ -41,7 +52,7 @@ function Login({ setLoggedIn, setMessage, message }) {
       });
       setLoggedIn(true);
       history.push('/');
-      // }, 3000);
+      }, 3000);
     }
   }, [popOpenSuccess, history, setLoggedIn]);
 
@@ -79,7 +90,7 @@ function Login({ setLoggedIn, setMessage, message }) {
           />
           <button className="register__button">Inicia sesión</button>
           <p className="register__subtitle">
-            ¿Aún no eres miembro? Regístrate <Link to="/signup">aquí</Link>
+            ¿Aún no eres miembro? Regístrate <Link to="/users/signup">aquí</Link>
           </p>
         </form>
         <InfoTooltip
