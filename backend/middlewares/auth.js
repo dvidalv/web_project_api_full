@@ -1,30 +1,28 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-const crypto = require('crypto');
-
-const randomHex = crypto.randomBytes(32).toString('hex');
-
-const { NODE_ENV, JWT_SECRET } = process.env;	// import NODE_ENV and JWT_SECRET from .env
+dotenv.config();
 
 module.exports = (req, res, next) => {
-	const { authorization } = req.headers;
-	console.log(req.headers);
-	console.log(authorization);
+  const { authorization } = req.headers;
+  // console.log('auth:', authorization);
 
-	if (!authorization || !authorization.startsWith('Bearer ')) {
-		return res.status(401).send({ message: 'Authorization required' });
-	}
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return res.status(401).send({ message: 'Authorization required' });
+  }
 
-	const token = authorization.replace('Bearer ', '');
-	let payload;
+  const token = authorization.replace('Bearer ', '');
+  // console.log('token', token);
+  let payload;
 
-	try {
-		payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : randomHex);
-	} catch (err) {
-		return res.status(401).send({ message: 'Authorization required' });
-	}
+  try {
+    payload = jwt.verify(token, process.env.JWT_SECRET);
+    // console.log(payload);
+  } catch (err) {
+    return res.status(401).send({ message: 'Authorization required' });
+  }
 
-	req.user = payload;
+  req.user = payload;
+  // console.log(req.user._id);
 
-	return next();
-}
+  return next();
+};

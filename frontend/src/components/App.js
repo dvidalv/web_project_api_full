@@ -1,7 +1,7 @@
 import Main from './Main';
 import Header from './Header';
 import Footer from './Footer';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
@@ -30,60 +30,68 @@ function App() {
   const [message, setMessage] = useState('');
   const [userData, setUserData] = useState({});
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [token, setToken] = useState('');
+
+  // Obtener las tarjetas
+  const fetchCards = useCallback(async () => {
+    try {
+      const cards = await api.getInitialCards(token);
+      setCards(cards);
+    } catch (err) {
+      // console.log(err);
+    }
+  }, [token]); // Dependencies of useCallback
 
   // Verificar el token
   useEffect(() => {
     const tokenCheck = async () => {
       const token = localStorage.getItem('token');
+      // console.log(token);
       if (token) {
         try {
           setIsLoading(true);
           const tokenIsValid = await checkToken(token);
+          // console.log(tokenIsValid);
           if (tokenIsValid) {
-            setUserData(tokenIsValid);
-            setIsLoading(false);
+            setToken(token);
             setLoggedIn(true);
             fetchCards();
-            history.push('/');
           } else {
             setLoggedIn(false);
-            history.push('/users/signin');
           }
         } catch (error) {
+          console.error(error);
           setLoggedIn(false);
-          history.push('/users/signin');
+        } finally {
+          setIsLoading(false);
         }
       } else {
         setLoggedIn(false);
         setIsLoading(false);
+      }
+
+      // Redirigir basado en el estado de loggedIn
+      if (loggedIn) {
+        history.push('/');
+      } else {
         history.push('/users/signin');
       }
     };
     tokenCheck();
-  }, [loggedIn, history]);
-
-  // Obtener las tarjetas
-  const fetchCards = async () => {
-    try {
-      const cards = await api.getInitialCards('cards');
-      setCards(cards);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  }, [loggedIn, history, token, fetchCards]);
 
   // get user info
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const userData = await api.getUserInfo('/users/me');
-        setCurrentUser(userData);
+        const userData = await api.getUserInfo(token);
+        setUserData(userData);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchUserInfo();
-  }, []);
+  }, [token]);
 
   // Cerrar sesión
   const cerrarSesion = () => {

@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { validateUser } = require('../models/user');
 const authenticateToken = require('../middlewares/auth');
+const authMiddleware = require('../middlewares/auth');
 
 const {
   getAllUsers,
@@ -21,7 +22,7 @@ router.post('/signin', login);
 
 router.post('/signup', validateUser, createUser);
 
-router.route('/me').get(getCurrentUser).patch(updateProfile);
+router.get('/me', authMiddleware, getCurrentUser).patch(updateProfile);
 
 router.patch('/me/avatar', authenticateToken, updateAvatar);
 

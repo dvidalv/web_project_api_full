@@ -5,11 +5,11 @@ const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
 const { requestLogger } = require('./middlewares/logger');
 const authMiddleware = require('./middlewares/auth');
-
 require('dotenv').config();
 cors = require('cors');
 
 const app = express();
+app.use(express.json());
 
 // conéctate al servidor MongoDB
 mongoose.connect('mongodb://localhost:27017/aroundb', {
@@ -30,26 +30,20 @@ app.use(requestLogger); // registrar todas las solicitudes HTTP
 // MIDDLEWARES
 app.use(morgan('dev'));
 
-app.use(express.json());
+// Opciones de CORS para permitir solicitudes de ciertos orígenes
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://localhost:3001'], // Asegúrate de incluir aquí el origen de tu frontend
+  credentials: true, // Para permitir cookies de sesión en las solicitudes entre dominios
+  allowedHeaders: 'Content-Type, Authorization', // Para permitir el token de autorización en las solicitudes
+};
 
-   // Opciones de CORS para permitir solicitudes de ciertos orígenes
-   const corsOptions = {
-    origin: ['http://localhost:3000', 'http://localhost:3001'], // Asegúrate de incluir aquí el origen de tu frontend
-    credentials: true, // Para permitir cookies de sesión en las solicitudes entre dominios
-  };
-
-  app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 // Rutas publicas
-app.use('/users',  usersRouter);
+app.use('/users', usersRouter);
 
 // Rutas protegidas
-app.use('/cards', authMiddleware, cardsRouter);
-// app.use('/cards', cardsRouter);
-
-
-//demas rutas
-// app.use('/users', usersRouter);
+app.use('/', authMiddleware, cardsRouter);
 
 // app.use(errorLogger); // registrar errores HTTP
 

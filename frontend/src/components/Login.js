@@ -2,7 +2,7 @@ import { Link, useHistory } from 'react-router-dom';
 import InfoTooltip from './InfoTooltip';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useEffect, useState, useContext } from 'react';
-import { authorize } from '../utils/auth';
+import { authorize, checkToken } from '../utils/auth';
 
 function Login({ setLoggedIn, setMessage, message }) {
   const { setIsMobileOpen } = useContext(CurrentUserContext);
@@ -19,21 +19,12 @@ function Login({ setLoggedIn, setMessage, message }) {
     e.preventDefault();
     const { email, password } = formData;
     try {
-      const res = await authorize(email, password);
-      if (res.token) {
-        const response = await fetch('http://localhost:3000/users/me', {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${res.token}`,
-          },
-        });
-        const userData = await response.json();
-        setMessage(`Bienvenido, ${userData.name}`);
-        localStorage.setItem('user', JSON.stringify(userData));
+      const token = await authorize(email, password);
+      if (token) {
+        setMessage(`Bienvenido!`);
+        localStorage.setItem('token', token);
+        // checkToken(token);
         setMessage('Inicio de sesión exitoso');
-        localStorage.setItem('token', res.token);
         setPopOpenSuccess(true);
         setIsMobileOpen(false);
       }
@@ -45,13 +36,13 @@ function Login({ setLoggedIn, setMessage, message }) {
   useEffect(() => {
     if (popOpenSuccess) {
       setTimeout(() => {
-      setPopOpenSuccess(false);
-      setFormData({
-        email: '',
-        password: '',
-      });
-      setLoggedIn(true);
-      history.push('/');
+        setPopOpenSuccess(false);
+        setFormData({
+          email: '',
+          password: '',
+        });
+        setLoggedIn(true);
+        history.push('/');
       }, 3000);
     }
   }, [popOpenSuccess, history, setLoggedIn]);
@@ -90,7 +81,8 @@ function Login({ setLoggedIn, setMessage, message }) {
           />
           <button className="register__button">Inicia sesión</button>
           <p className="register__subtitle">
-            ¿Aún no eres miembro? Regístrate <Link to="/users/signup">aquí</Link>
+            ¿Aún no eres miembro? Regístrate{' '}
+            <Link to="/users/signup">aquí</Link>
           </p>
         </form>
         <InfoTooltip

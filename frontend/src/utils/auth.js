@@ -26,23 +26,43 @@ export const authorize = (email, password) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
-  }).then((response) => {
-    return response.json();
   })
-  .then((res) => {
-    console.log(res)
-    return res;
-  });
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((res) => {
+      return res.token;
+    })
+    .catch((error) => {
+      console.error(
+        'There has been a problem with your fetch operation:',
+        error
+      );
+    });
 };
 
 // comprueba el token la validez del token
-export const checkToken = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      authorization: `Bearer ${token}`,
-    },
-  }).then((res) => res.json());
+export const checkToken = async (token) => {
+  // console.log('token', token);
+  try {
+    const response = await fetch(`${BASE_URL}/users/me`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      // Aquí puedes manejar diferentes códigos de estado específicos si es necesario
+      throw new Error(`Network response was not ok: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('There has been a problem with your fetch operation:', error);
+    // Considerar lanzar el error o manejarlo según sea necesario
+  }
 };
