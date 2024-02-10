@@ -43,20 +43,19 @@ function App() {
 
   // Verificar el token
   useEffect(() => {
+    setIsLoading(true);
     const tokenCheck = async () => {
+      let shouldRedirectToHome = false; // Variable local para controlar la redirección
       const token = localStorage.getItem('token');
-      // console.log(token);
       if (token) {
         try {
-          setIsLoading(true);
           const tokenIsValid = await checkToken(token);
-
           if (tokenIsValid) {
             const { user } = tokenIsValid;
             setCurrentUser(user);
-            // console.log(currentUser);
             setToken(token);
             setLoggedIn(true);
+            shouldRedirectToHome = true; // Actualiza la variable basada en el resultado
             fetchCards();
           } else {
             setLoggedIn(false);
@@ -66,21 +65,21 @@ function App() {
           setLoggedIn(false);
         } finally {
           setIsLoading(false);
+          // Redirigir basado en el resultado de la operación asíncrona
+          if (shouldRedirectToHome) {
+            history.push('/');
+          } else {
+            history.push('/users/signin');
+          }
         }
       } else {
         setLoggedIn(false);
         setIsLoading(false);
-      }
-
-      // Redirigir basado en el estado de loggedIn
-      if (loggedIn) {
-        history.push('/');
-      } else {
-        history.push('/users/signin');
+        history.push('/users/signin'); // Redirige si no hay token
       }
     };
     tokenCheck();
-  }, [loggedIn, history, token, fetchCards]);
+  }, [history, fetchCards]);
 
   // Cerrar sesión
   const cerrarSesion = () => {
@@ -226,7 +225,7 @@ function App() {
         <AnimatePresence>
           {isEditProfilePopupOpen && (
             <EditProfilePopup
-              key="editProfilePopup"
+              key="editProfilePopup" // This is necessary to make the component re-mount every time it opens
               isOpen={isEditProfilePopupOpen}
               onClose={closeAllPopups}
               onUpdateUser={handleUpdateUser}
