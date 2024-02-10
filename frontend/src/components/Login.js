@@ -2,10 +2,10 @@ import { Link, useHistory } from 'react-router-dom';
 import InfoTooltip from './InfoTooltip';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useEffect, useState, useContext } from 'react';
-import { authorize, checkToken } from '../utils/auth';
+import { authorize } from '../utils/auth';
 
 function Login({ setLoggedIn, setMessage, message }) {
-  const { setIsMobileOpen } = useContext(CurrentUserContext);
+  const { setIsMobileOpen, setToken } = useContext(CurrentUserContext);
 
   const history = useHistory();
   const [formData, setFormData] = useState({
@@ -21,6 +21,7 @@ function Login({ setLoggedIn, setMessage, message }) {
     try {
       const token = await authorize(email, password);
       if (token) {
+        setToken(token);
         setMessage(`Bienvenido!`);
         localStorage.setItem('token', token);
         // checkToken(token);

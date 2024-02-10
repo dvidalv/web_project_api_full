@@ -36,9 +36,7 @@ function App() {
     try {
       const cards = await api.getInitialCards(token);
       setCards(cards);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   }, [token]); // Dependencies of useCallback
 
   // Verificar el token
@@ -52,10 +50,11 @@ function App() {
           const tokenIsValid = await checkToken(token);
           if (tokenIsValid) {
             const { user } = tokenIsValid;
-            setCurrentUser(user);
+            // console.log(user);
             setToken(token);
             setLoggedIn(true);
             shouldRedirectToHome = true; // Actualiza la variable basada en el resultado
+            setCurrentUser(user);
             fetchCards();
           } else {
             setLoggedIn(false);
@@ -79,7 +78,7 @@ function App() {
       }
     };
     tokenCheck();
-  }, [history, fetchCards]);
+  }, [history, fetchCards, setLoggedIn, setCurrentUser, setToken]);
 
   // Cerrar sesión
   const cerrarSesion = () => {
@@ -145,18 +144,21 @@ function App() {
 
   const handleUpdateUser = async (userData) => {
     try {
-      const updatedUser = await api.patchUserInfo(userData);
-      setCurrentUser(updatedUser);
+      const updatedUser = await api.patchUserInfo(userData, token);
+      setCurrentUser(updatedUser.user);
     } catch (error) {
       console.log(error);
     }
     closeAllPopups();
   };
 
+  // Function to handle the avatar update
   const handleUpdateAvatar = async (avatar) => {
     try {
-      const updateAvatar = await api.setUserAvatar(avatar);
-      setCurrentUser(updateAvatar);
+      const updateAvatar = await api.setUserAvatar(avatar, token);
+      // console.log(updateAvatar);
+
+      setCurrentUser(updateAvatar.user);
     } catch (error) {
       console.log(error);
     }
@@ -167,7 +169,7 @@ function App() {
   const handleAddPlaceSubmit = async (card) => {
     try {
       // Call the API to add the new card
-      const newCard = await api.addCard(card);
+      const newCard = await api.addCard(card, token);
       // Update the state of cards by adding the new card to the existing list
       setCards([newCard, ...cards]);
     } catch (error) {
@@ -191,6 +193,7 @@ function App() {
           loggedIn,
           isMobileOpen,
           setIsMobileOpen,
+          setToken,
         }}
       >
         <Header onCerrarSession={cerrarSesion} />

@@ -47,15 +47,20 @@ class Api {
   async getUserAvatar(resource) {
     return await this.fetchData(`${this._url}${resource}`, 'GET');
   }
-  async setUserAvatar(data) {
-    return await this.fetchData(`${this._url}users/me/avatar`, 'PATCH', data);
+  async setUserAvatar(data, token) {
+    return await this.fetchData(
+      `${this._url}users/me/avatar`,
+      'PATCH',
+      data,
+      token
+    );
   }
 
-  async patchUserInfo(data) {
-    return await this.fetchData(`${this._url}users/me`, 'PATCH', data);
+  async patchUserInfo(data, token) {
+    return await this.fetchData(`${this._url}users/me`, 'PATCH', data, token);
   }
-  async addCard(newCard) {
-    return await this.fetchData(`${this._url}cards`, 'POST', newCard);
+  async addCard(newCard, token) {
+    return await this.fetchData(`${this._url}cards`, 'POST', newCard, token);
   }
 
   async deleteCard(resource, card_Id) {

@@ -12,7 +12,10 @@ const {
 
 const router = Router();
 
-router.route('/').get(getAllCards).post(createCard);
+router
+  .route('/')
+  .get(authenticateToken, getAllCards)
+  .post(authenticateToken, createCard);
 
 router.route('/cards/:cardId').get(getCardById).delete(deleteCard);
 

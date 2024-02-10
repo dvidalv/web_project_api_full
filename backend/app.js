@@ -43,7 +43,7 @@ app.use(cors(corsOptions));
 app.use('/users', usersRouter);
 
 // Rutas protegidas
-app.use('/cards', authMiddleware, cardsRouter);
+app.use('/cards', cardsRouter);
 
 // app.use(errorLogger); // registrar errores HTTP
 

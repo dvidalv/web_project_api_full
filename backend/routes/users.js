@@ -27,7 +27,7 @@ router
   .get(authenticateToken, getCurrentUser)
   .patch(authenticateToken, updateProfile);
 
-router.patch('/me/avatar', authenticateToken, updateAvatar);
+router.route('/me/avatar').patch(authenticateToken, updateAvatar);
 
 // Rutas para operaciones específicas de usuario
 router
