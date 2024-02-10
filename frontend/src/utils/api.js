@@ -41,7 +41,7 @@ class Api {
 
   async getInitialCards(token) {
     // console.log(this._url);
-    return await this.fetchData(`${this._url}`, 'GET', null, token);
+    return await this.fetchData(`${this._url}cards`, 'GET', null, token);
   }
 
   async getUserAvatar(resource) {

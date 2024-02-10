@@ -19,7 +19,8 @@ function Main({
   cards,
   onCardLike,
 }) {
-  const { userData } = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
+  const { about, avatar, name } = currentUser;
   return (
     <main className="content">
       <section className="profile">
@@ -27,7 +28,7 @@ function Main({
           <div className="profile__avatar">
             <img
               className="profile__imagen"
-              src={userData.user?.avatar}
+              src={avatar}
               alt="Imagen de perfil"
             />
             <div className="profile__overlay">
@@ -42,7 +43,7 @@ function Main({
 
           <div className="profile__info">
             <div className="profile__contenedor-titulo">
-              <h1 className="profile__title">{userData.user?.name}</h1>
+              <h1 className="profile__title">{name}</h1>
               <button
                 onClick={onEditPerfil}
                 type="button"
@@ -51,7 +52,7 @@ function Main({
                 <img src={editButton} alt="edit button" />
               </button>
             </div>
-            <p className="profile__subtitle">{userData.user?.about}</p>
+            <p className="profile__subtitle">{about}</p>
           </div>
         </div>
 

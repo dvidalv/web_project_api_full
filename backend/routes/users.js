@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const { validateUser } = require('../models/user');
 const authenticateToken = require('../middlewares/auth');
-const authMiddleware = require('../middlewares/auth');
 
 const {
   getAllUsers,
@@ -16,16 +15,24 @@ const {
 
 const router = Router();
 
-router.get('/', getAllUsers);
-
+// Rutas de autenticación
 router.post('/signin', login);
-
 router.post('/signup', validateUser, createUser);
 
-router.get('/me', authMiddleware, getCurrentUser).patch(updateProfile);
+// Rutas de usuarios
+router.route('/').get(getAllUsers);
+
+router
+  .route('/me')
+  .get(authenticateToken, getCurrentUser)
+  .patch(authenticateToken, updateProfile);
 
 router.patch('/me/avatar', authenticateToken, updateAvatar);
 
-router.get('/:id', authenticateToken, getUserById).delete('/:id', deleteUser);
+// Rutas para operaciones específicas de usuario
+router
+  .route('/:id')
+  .get(authenticateToken, getUserById)
+  .delete(authenticateToken, deleteUser);
 
 module.exports = router;

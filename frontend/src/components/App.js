@@ -28,7 +28,6 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState('');
-  const [userData, setUserData] = useState({});
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [token, setToken] = useState('');
 
@@ -38,7 +37,7 @@ function App() {
       const cards = await api.getInitialCards(token);
       setCards(cards);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   }, [token]); // Dependencies of useCallback
 
@@ -51,8 +50,11 @@ function App() {
         try {
           setIsLoading(true);
           const tokenIsValid = await checkToken(token);
-          // console.log(tokenIsValid);
+
           if (tokenIsValid) {
+            const { user } = tokenIsValid;
+            setCurrentUser(user);
+            // console.log(currentUser);
             setToken(token);
             setLoggedIn(true);
             fetchCards();
@@ -80,24 +82,11 @@ function App() {
     tokenCheck();
   }, [loggedIn, history, token, fetchCards]);
 
-  // get user info
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const userData = await api.getUserInfo(token);
-        setUserData(userData);
-      } catch (error) {
-        // console.log(error);
-      }
-    };
-    fetchUserInfo();
-  }, [token]);
-
   // Cerrar sesión
   const cerrarSesion = () => {
     localStorage.removeItem('token');
     setLoggedIn(false);
-    setUserData({});
+    setCurrentUser({});
     setIsMobileOpen(false);
     history.push('/users/signin');
   };
@@ -201,7 +190,6 @@ function App() {
           currentUser,
           cardToDelete,
           loggedIn,
-          userData,
           isMobileOpen,
           setIsMobileOpen,
         }}

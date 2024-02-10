@@ -7,7 +7,7 @@ import logo from '../images/logo.svg';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 // import { setIsLoggedIn } from '../utils/auth';
 function Header({ onCerrarSession }) {
-  const { loggedIn, userData, isMobileOpen, setIsMobileOpen } =
+  const { loggedIn, currentUser, isMobileOpen, setIsMobileOpen } =
     useContext(CurrentUserContext);
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
 
@@ -21,7 +21,7 @@ function Header({ onCerrarSession }) {
     setIsMobileOpen(!isMobileOpen);
   };
 
-  const email = userData && userData.user ? userData.user.email : null;
+  const { email } = currentUser;
   const myStyle = {
     marginTop: 5,
     color: '#a9a9a9',
