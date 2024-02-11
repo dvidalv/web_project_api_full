@@ -47,20 +47,54 @@ const getCardById = async (req, res) => {
   }
 };
 
-// DELETE /cards/:cardId
 const deleteCard = async (req, res) => {
+  const { cardId } = req.params;
   try {
-    const { cardId } = req.params;
     if (!cardId) {
-      return res.status(400).send({ message: 'cardId is required' });
+      return res
+        .status(httpStatus.BAD_REQUEST)
+        .send({ message: 'cardId is required' });
     }
-    const card = await Card.findByIdAndDelete(cardId).orFail();
-    return res.status(200).send(card);
+    const card = await Card.findByIdAndDelete(cardId);
+    if (!card) {
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .send({ message: 'No card found with this id' });
+    }
+    return res.status(httpStatus.OK).send(card);
   } catch (err) {
     if (err.name === 'CastError') {
-      return res.status(400).send({ message: 'Invalid cardId' });
+      return res
+        .status(httpStatus.BAD_REQUEST)
+        .send({ message: 'Invalid cardId' });
     }
-    return res.status(404).send({ message: 'No card found with this id' });
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .send({ message: err.message });
+  }
+};
+
+exports.deleteCardById = async (req, res) => {
+  const { cardId } = req.params;
+  const { _id } = req.user;
+  try {
+    const selectedCard = await Card.findById(cardId);
+
+    if (!selectedCard) {
+      return res.status(404).send('Card no encontrada');
+    }
+
+    if (selectedCard.owner.toString() !== _id) {
+      return res.status(404).send('No tienes permiso para borrar esta Card');
+    }
+
+    const deletedCard = await Card.findByIdAndRemove(cardId);
+    return res.json({ data: deletedCard });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).send('Datos de la Card inválidos');
+    }
+    return res.status(500).send('Error al eliminar la Card', error);
   }
 };
 

@@ -35,6 +35,7 @@ const corsOptions = {
   origin: ['http://localhost:3000', 'http://localhost:3001'], // Asegúrate de incluir aquí el origen de tu frontend
   credentials: true, // Para permitir cookies de sesión en las solicitudes entre dominios
   allowedHeaders: 'Content-Type, Authorization', // Para permitir el token de autorización en las solicitudes
+  allowedMethods: 'GET, POST, PATCH, PUT, DELETE, OPTIONS', // Para permitir los métodos HTTP
 };
 
 app.use(cors(corsOptions));

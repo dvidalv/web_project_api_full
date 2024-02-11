@@ -5,7 +5,7 @@ function Card({ onCardClick, card, onDeleteClick, onCardLike }) {
   const { currentUser } = useContext(CurrentUserContext);
 
   // Verificando si el usuario actual es el propietario de la tarjeta actual
-  const isOwn = card.owner._id === currentUser._id;
+  const isOwn = card.owner === currentUser._id;
 
   // Verifica si el usuario actual le dio "like" a la tarjeta
   const isLiked = card.likes.some((i) => i._id === currentUser._id);

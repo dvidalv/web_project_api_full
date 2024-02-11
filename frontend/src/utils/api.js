@@ -17,6 +17,21 @@ class Api {
         }
         return await Promise.reject(`Error: ${resp.status}`);
       }
+
+      if (method === 'DELETE') {
+        const resp = await fetch(`${url}`, {
+          method,
+          headers: {
+            authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (resp.ok) {
+          return await resp.json();
+        }
+        return await Promise.reject(`Error: ${resp.status}`);
+      }
+
       const result = await fetch(`${url}`, {
         method,
         headers: {
@@ -33,6 +48,15 @@ class Api {
     } catch (error) {
       throw error;
     }
+  }
+
+  async deleteCard(resource, cardId, token) {
+    return await this.fetchData(
+      `${this._url}${resource}/${cardId}`,
+      'DELETE',
+      null,
+      token
+    );
   }
 
   async getUserInfo(token) {
@@ -61,10 +85,6 @@ class Api {
   }
   async addCard(newCard, token) {
     return await this.fetchData(`${this._url}cards`, 'POST', newCard, token);
-  }
-
-  async deleteCard(resource, card_Id) {
-    return await this.fetchData(`${this._url}${resource}/${card_Id}`, 'DELETE');
   }
 
   async dislikeCard(resource, card_Id) {

@@ -35,6 +35,7 @@ function App() {
   const fetchCards = useCallback(async () => {
     try {
       const cards = await api.getInitialCards(token);
+      console.log(cards);
       setCards(cards);
     } catch (err) {}
   }, [token]); // Dependencies of useCallback
@@ -102,8 +103,10 @@ function App() {
   }
 
   const handleCardDelete = async (card) => {
+    // console.log(card._id);
+    // debugger;
     try {
-      await api.deleteCard('cards', card._id);
+      const rest = await api.deleteCard('cards', card._id, token);
       setCards((cards) => cards.filter((c) => c._id !== card._id));
     } catch (err) {
       console.log(err);
