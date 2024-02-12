@@ -4,7 +4,7 @@ dotenv.config();
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  console.log('auth:', authorization);
+  // console.log('auth:', authorization);
   // debugger;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {

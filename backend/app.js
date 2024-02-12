@@ -3,8 +3,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
-const { requestLogger } = require('./middlewares/logger');
-const authMiddleware = require('./middlewares/auth');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 require('dotenv').config();
 cors = require('cors');
 
@@ -32,7 +31,13 @@ app.use(morgan('dev'));
 
 // Opciones de CORS para permitir solicitudes de ciertos orígenes
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3001'], // Asegúrate de incluir aquí el origen de tu frontend
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'api.alrededorusa.mooo.com',
+    'https://alrededorusa.mooo.com',
+    'https://www.alrededorusa.mooo.com',
+  ], // Asegúrate de incluir aquí el origen de tu frontend
   credentials: true, // Para permitir cookies de sesión en las solicitudes entre dominios
   allowedHeaders: 'Content-Type, Authorization', // Para permitir el token de autorización en las solicitudes
   allowedMethods: 'GET, POST, PATCH, PUT, DELETE, OPTIONS', // Para permitir los métodos HTTP
@@ -40,31 +45,42 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use(requestLogger); // registrar errores HTTP
+
 // Rutas publicas
 app.use('/users', usersRouter);
 
 // Rutas protegidas
 app.use('/cards', cardsRouter);
 
-// app.use(errorLogger); // registrar errores HTTP
-
+app.use(errorLogger); // registrar errores HTTP
 // app.use(errors()); // manejar errores celebrados por Joi
 
 // MIDDLEWARE - Not found handler
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({
     status: 'error',
     message: 'Route not found',
   });
-  next();
 });
 
 // MIDDLEWARE - server error
-app.use((err, req, res, next) => {
-  // eslint-disable-next-line no-console
-  console.error(err.stack); // Log error stack to console
-  res.status(500).send('ha ocurrido un error en el servidor');
-  next(new Error('algo salió mal'));
+app.use((err, req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('Error log:', err.stack);
+  } else {
+    console.error(err.stack);
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    res.status(500).send('Ha ocurrido un error en el servidor');
+  } else {
+    res.status(500).json({
+      message: 'Ha ocurrido un error en el servidor',
+      error: err.message,
+      stack: err.stack,
+    });
+  }
 });
 
 // START SERVER

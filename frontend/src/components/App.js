@@ -35,7 +35,6 @@ function App() {
   const fetchCards = useCallback(async () => {
     try {
       const cards = await api.getInitialCards(token);
-      console.log(cards);
       setCards(cards);
     } catch (err) {}
   }, [token]); // Dependencies of useCallback
@@ -92,10 +91,12 @@ function App() {
 
   async function handleCardLike(card) {
     // Verifica una vez más si a esta tarjeta ya le han dado like
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
+    console.log(isLiked);
 
     try {
-      const newCard = await api.changeLikeCardStatus(card._id, !isLiked);
+      const newCard = await api.changeLikeCardStatus(card._id, !isLiked, token);
+      console.log(newCard);
       setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
     } catch (error) {
       console.log(error);
@@ -103,10 +104,9 @@ function App() {
   }
 
   const handleCardDelete = async (card) => {
-    // console.log(card._id);
-    // debugger;
     try {
-      const rest = await api.deleteCard('cards', card._id, token);
+      await api.deleteCard('cards', card._id, token);
+
       setCards((cards) => cards.filter((c) => c._id !== card._id));
     } catch (err) {
       console.log(err);

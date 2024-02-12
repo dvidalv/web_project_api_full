@@ -40,6 +40,7 @@ class Api {
         },
         body: JSON.stringify(data),
       });
+
       if (result.ok) {
         return await result.json();
       }
@@ -48,6 +49,15 @@ class Api {
     } catch (error) {
       throw error;
     }
+  }
+
+  async changeLikeCardStatus(id, isLike, token) {
+    return await this.fetchData(
+      `${this._url}cards/likes/${id}`,
+      isLike ? 'PUT' : 'DELETE',
+      isLike ? { like: true } : { like: false },
+      token
+    );
   }
 
   async deleteCard(resource, cardId, token) {
@@ -89,12 +99,6 @@ class Api {
 
   async dislikeCard(resource, card_Id) {
     return await this.fetchData(`${this._url}${resource}/${card_Id}`, 'DELETE');
-  }
-  async changeLikeCardStatus(id, isLike) {
-    return await this.fetchData(
-      `${this._url}cards/likes/${id}`,
-      isLike ? 'PUT' : 'DELETE'
-    );
   }
 }
 const api = new Api();

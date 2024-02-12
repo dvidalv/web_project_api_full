@@ -17,12 +17,14 @@ router
   .get(authenticateToken, getAllCards)
   .post(authenticateToken, createCard);
 
-router.route('/:cardId').get(authenticateToken, getCardById);
-router.route('/:cardId').delete(deleteCard);
+router
+  .route('/:cardId')
+  .get(authenticateToken, getCardById)
+  .delete(authenticateToken, deleteCard);
 
 router
-  .route('/:cardId/likes')
+  .route('/likes/:cardId')
   .put(authenticateToken, likeCard)
-  .put(authenticateToken, dislikeCard);
+  .delete(authenticateToken, dislikeCard);
 
 module.exports = router;
