@@ -1,6 +1,7 @@
 class Api {
   constructor() {
-    this._url = 'http://localhost:3000/';
+    this._url =
+      process.env.api.alrededorusa.mooo.com || 'http://localhost:3000/';
   }
   async fetchData(url, method, data, token) {
     try {
@@ -70,20 +71,20 @@ class Api {
   }
 
   async getUserInfo(token) {
-    return await this.fetchData(`${this._url}users/me`, 'GET', null, token);
+    return await this.fetchData(`${this._url}/users/me`, 'GET', null, token);
   }
 
   async getInitialCards(token) {
     // console.log(this._url);
-    return await this.fetchData(`${this._url}cards`, 'GET', null, token);
+    return await this.fetchData(`${this._url}/cards`, 'GET', null, token);
   }
 
   async getUserAvatar(resource) {
-    return await this.fetchData(`${this._url}${resource}`, 'GET');
+    return await this.fetchData(`${this._url}/${resource}`, 'GET');
   }
   async setUserAvatar(data, token) {
     return await this.fetchData(
-      `${this._url}users/me/avatar`,
+      `${this._url}/users/me/avatar`,
       'PATCH',
       data,
       token
@@ -91,14 +92,17 @@ class Api {
   }
 
   async patchUserInfo(data, token) {
-    return await this.fetchData(`${this._url}users/me`, 'PATCH', data, token);
+    return await this.fetchData(`${this._url}/users/me`, 'PATCH', data, token);
   }
   async addCard(newCard, token) {
-    return await this.fetchData(`${this._url}cards`, 'POST', newCard, token);
+    return await this.fetchData(`${this._url}/cards`, 'POST', newCard, token);
   }
 
   async dislikeCard(resource, card_Id) {
-    return await this.fetchData(`${this._url}${resource}/${card_Id}`, 'DELETE');
+    return await this.fetchData(
+      `${this._url}/${resource}/${card_Id}`,
+      'DELETE'
+    );
   }
 }
 const api = new Api();
