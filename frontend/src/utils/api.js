@@ -1,7 +1,6 @@
 class Api {
   constructor() {
-    this._url =
-      process.env.api.alrededorusa.mooo.com || 'http://localhost:3000/';
+    this._url = 'alrededorusa.mooo.com';
   }
   async fetchData(url, method, data, token) {
     try {
