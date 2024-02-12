@@ -9,6 +9,7 @@
 /frontend
 
 /backend/node_modules
+/backend/.env
 
 
 # testing
