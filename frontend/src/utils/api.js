@@ -1,6 +1,6 @@
 class Api {
   constructor() {
-    this._url = 'alrededorusa.mooo.com';
+    this._url = 'api.alrededorusa.mooo.com';
   }
   async fetchData(url, method, data, token) {
     try {

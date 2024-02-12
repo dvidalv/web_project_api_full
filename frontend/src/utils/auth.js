@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'https://api.alrededorusa.mooo.com';
 
 // Registrar un nuevo usuario
 export const register = (name, about, avatar, email, password) => {
