@@ -34,7 +34,7 @@ const corsOptions = {
   origin: [
     'http://localhost:3000',
     'http://localhost:3001',
-    'api.alrededorusa.mooo.com',
+    'https://api.alrededorusa.mooo.com',
     'https://alrededorusa.mooo.com',
     'https://www.alrededorusa.mooo.com',
   ], // Asegúrate de incluir aquí el origen de tu frontend
