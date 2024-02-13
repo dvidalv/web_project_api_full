@@ -41,8 +41,9 @@ function App() {
         // console.log(err);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [token]
-  ); // Dependencies of useCallback
+  );
 
   // Verificar el token
   useEffect(() => {
