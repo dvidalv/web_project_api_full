@@ -54,7 +54,7 @@ class Api {
 
   async changeLikeCardStatus(id, isLike, token) {
     return await this.fetchData(
-      `${this._url}cards/likes/${id}`,
+      `${this._url}/cards/likes/${id}`,
       isLike ? 'PUT' : 'DELETE',
       isLike ? { like: true } : { like: false },
       token
@@ -63,7 +63,7 @@ class Api {
 
   async deleteCard(resource, cardId, token) {
     return await this.fetchData(
-      `${this._url}${resource}/${cardId}`,
+      `${this._url}/${resource}/${cardId}`,
       'DELETE',
       null,
       token

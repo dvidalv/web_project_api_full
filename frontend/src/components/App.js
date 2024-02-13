@@ -56,7 +56,7 @@ function App() {
           const tokenIsValid = await checkToken(token);
           if (tokenIsValid) {
             const { user } = tokenIsValid;
-            console.log(user);
+            // console.log(user);
             setToken(token);
             setLoggedIn(true);
             shouldRedirectToHome = true; // Actualiza la variable basada en el resultado
