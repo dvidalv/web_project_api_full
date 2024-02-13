@@ -51,7 +51,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(requestLogger); // registrar errores HTTP
+app.use(requestLogger); // registrar todas las solicitudes HTTP
 
 // Rutas publicas
 app.use('/users', usersRouter);

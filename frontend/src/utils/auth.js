@@ -4,7 +4,7 @@ export const BASE_URL = url;
 
 // Registrar un nuevo usuario
 export const register = (name, about, avatar, email, password) => {
-  return fetch(`${BASE_URL}/users/signup`, {
+  return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -21,7 +21,7 @@ export const register = (name, about, avatar, email, password) => {
 
 //login and get token
 export const authorize = (email, password) => {
-  return fetch(`${BASE_URL}/users/signin`, {
+  return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -50,7 +50,7 @@ export const authorize = (email, password) => {
 export const checkToken = async (token) => {
   // console.log('token', token);
   try {
-    const response = await fetch(`${BASE_URL}/users/me`, {
+    const response = await fetch(`${BASE_URL}/me`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

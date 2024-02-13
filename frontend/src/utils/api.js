@@ -71,7 +71,7 @@ class Api {
   }
 
   async getUserInfo(token) {
-    return await this.fetchData(`${this._url}/users/me`, 'GET', null, token);
+    return await this.fetchData(`${this._url}/me`, 'GET', null, token);
   }
 
   async getInitialCards(token) {
@@ -83,16 +83,11 @@ class Api {
     return await this.fetchData(`${this._url}/${resource}`, 'GET');
   }
   async setUserAvatar(data, token) {
-    return await this.fetchData(
-      `${this._url}/users/me/avatar`,
-      'PATCH',
-      data,
-      token
-    );
+    return await this.fetchData(`${this._url}/me/avatar`, 'PATCH', data, token);
   }
 
   async patchUserInfo(data, token) {
-    return await this.fetchData(`${this._url}/users/me`, 'PATCH', data, token);
+    return await this.fetchData(`${this._url}/me`, 'PATCH', data, token);
   }
   async addCard(newCard, token) {
     return await this.fetchData(`${this._url}/cards`, 'POST', newCard, token);
