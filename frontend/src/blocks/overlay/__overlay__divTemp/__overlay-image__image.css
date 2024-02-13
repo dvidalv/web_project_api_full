@@ -1,0 +1,9 @@
+.titulo_imagen{
+	font-size: 18px;
+	color: white;
+	margin: 10px 0;
+}
+.overlay-image__image{
+	max-height: 75vh;
+	max-width: 75vw;
+}
