@@ -82,8 +82,7 @@ function Login({ setLoggedIn, setMessage, message }) {
           />
           <button className="register__button">Inicia sesión</button>
           <p className="register__subtitle">
-            ¿Aún no eres miembro? Regístrate{' '}
-            <Link to="/users/signup">aquí</Link>
+            ¿Aún no eres miembro? Regístrate <Link to="/signup">aquí</Link>
           </p>
         </form>
         <InfoTooltip

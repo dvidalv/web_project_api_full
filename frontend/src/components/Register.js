@@ -15,7 +15,8 @@ function Register({ setMessage, message }) {
     confirmPassword: '',
     name: 'Jacques Cousteau',
     about: 'Explorador',
-    avatar: 'https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg',
+    avatar:
+      'https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg',
   });
 
   useEffect(() => {
@@ -28,10 +29,9 @@ function Register({ setMessage, message }) {
           avatar: '',
           email: '',
           password: '',
-
         });
 
-        history.push('/users/signin');
+        history.push('/signin');
       }, 3000);
     }
   }, [popOpenSuccess, history]);
@@ -40,7 +40,6 @@ function Register({ setMessage, message }) {
     e.preventDefault();
     const { name, about, avatar, email, password, confirmPassword } = formData;
     if (password === confirmPassword) {
-
       register(name, about, avatar, email, password)
         .then((res) => {
           if (res.user.email) {
@@ -114,7 +113,6 @@ function Register({ setMessage, message }) {
             placeholder="Nombre"
             value={formData.name}
             onChange={handleChange}
-
           />
           <input
             className="register__input"
@@ -123,7 +121,6 @@ function Register({ setMessage, message }) {
             placeholder="About"
             value={formData.about}
             onChange={handleChange}
-
           />
           <input
             className="register__input"
@@ -132,12 +129,11 @@ function Register({ setMessage, message }) {
             placeholder="Avatar"
             value={formData.avatar}
             onChange={handleChange}
-
           />
           {error ? <Error error={error} /> : null}
           <button className="register__button">Regístrate</button>
           <p className="register__subtitle">
-            ¿Ya eres miembro? Inicia sesión {<Link to={'/users/signin'}>aquí</Link>}
+            ¿Ya eres miembro? Inicia sesión {<Link to={'/signin'}>aquí</Link>}
           </p>
         </form>
         <InfoTooltip

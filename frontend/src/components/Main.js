@@ -20,6 +20,7 @@ function Main({
   onCardLike,
 }) {
   const { currentUser } = useContext(CurrentUserContext);
+  console.log(currentUser);
   const { about, avatar, name } = currentUser;
   return (
     <main className="content">

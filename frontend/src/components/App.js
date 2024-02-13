@@ -32,14 +32,17 @@ function App() {
   const [token, setToken] = useState('');
 
   // Obtener las tarjetas
-  const fetchCards = useCallback(async (token) => {
-    try {
-      const cards = await api.getInitialCards(token);
-      setCards(cards);
-    } catch (err) {
-      // console.log(err);
-    }
-  }, []); // Dependencies of useCallback
+  const fetchCards = useCallback(
+    async (token) => {
+      try {
+        const cards = await api.getInitialCards(token);
+        setCards(cards);
+      } catch (err) {
+        // console.log(err);
+      }
+    },
+    [token]
+  ); // Dependencies of useCallback
 
   // Verificar el token
   useEffect(() => {
@@ -52,7 +55,7 @@ function App() {
           const tokenIsValid = await checkToken(token);
           if (tokenIsValid) {
             const { user } = tokenIsValid;
-            // console.log(user);
+            console.log(user);
             setToken(token);
             setLoggedIn(true);
             shouldRedirectToHome = true; // Actualiza la variable basada en el resultado
@@ -70,13 +73,13 @@ function App() {
           if (shouldRedirectToHome) {
             history.push('/');
           } else {
-            history.push('/users/signin');
+            history.push('/signin');
           }
         }
       } else {
         setLoggedIn(false);
         setIsLoading(false);
-        history.push('/users/signin'); // Redirige si no hay token
+        history.push('/signin'); // Redirige si no hay token
       }
     };
     tokenCheck();
@@ -88,7 +91,7 @@ function App() {
     setLoggedIn(false);
     setCurrentUser({});
     setIsMobileOpen(false);
-    history.push('/users/signin');
+    history.push('/signin');
   };
 
   async function handleCardLike(card) {
@@ -203,10 +206,10 @@ function App() {
       >
         <Header onCerrarSession={cerrarSesion} />
         <Switch>
-          <Route path="/users/signup">
+          <Route path="/signup">
             <Register message={message} setMessage={setMessage} />
           </Route>
-          <Route path="/users/signin">
+          <Route path="/signin">
             <Login
               setLoggedIn={setLoggedIn}
               message={message}
