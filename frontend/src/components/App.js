@@ -32,14 +32,14 @@ function App() {
   const [token, setToken] = useState('');
 
   // Obtener las tarjetas
-  const fetchCards = useCallback(async () => {
+  const fetchCards = useCallback(async (token) => {
     try {
       const cards = await api.getInitialCards(token);
       setCards(cards);
     } catch (err) {
       // console.log(err);
     }
-  }, [token]); // Dependencies of useCallback
+  }, []); // Dependencies of useCallback
 
   // Verificar el token
   useEffect(() => {
@@ -57,7 +57,7 @@ function App() {
             setLoggedIn(true);
             shouldRedirectToHome = true; // Actualiza la variable basada en el resultado
             setCurrentUser(user);
-            fetchCards();
+            fetchCards(token);
           } else {
             setLoggedIn(false);
           }

@@ -1,5 +1,6 @@
 // export const BASE_URL = 'localhost:3000';
-export const BASE_URL = 'https://api.alrededorusa.mooo.com';
+import url from '../utils/constants';
+export const BASE_URL = url;
 
 // Registrar un nuevo usuario
 export const register = (name, about, avatar, email, password) => {

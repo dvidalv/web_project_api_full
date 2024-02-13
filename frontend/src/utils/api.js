@@ -1,6 +1,7 @@
+import url from '../utils/constants';
 class Api {
   constructor() {
-    this._url = 'https://api.alrededorusa.mooo.com';
+    this._url = url;
   }
   async fetchData(url, method, data, token) {
     try {
