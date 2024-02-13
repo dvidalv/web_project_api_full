@@ -30,6 +30,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [token, setToken] = useState('');
+  const [isVerifyingToken, setIsVerifyingToken] = useState(true);
 
   // Obtener las tarjetas
   const fetchCards = useCallback(
@@ -47,19 +48,18 @@ function App() {
 
   // Verificar el token
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
+    setIsVerifyingToken(true); // Inicia la verificación del token
     const tokenCheck = async () => {
-      let shouldRedirectToHome = false; // Variable local para controlar la redirección
+      let shouldRedirectToHome = false;
       const token = localStorage.getItem('token');
       if (token) {
         try {
           const tokenIsValid = await checkToken(token);
           if (tokenIsValid) {
             const { user } = tokenIsValid;
-            console.log(user);
-            setToken(token);
             setLoggedIn(true);
-            shouldRedirectToHome = true; // Actualiza la variable basada en el resultado
+            shouldRedirectToHome = true;
             setCurrentUser(user);
             fetchCards(token);
           } else {
@@ -70,7 +70,7 @@ function App() {
           setLoggedIn(false);
         } finally {
           setIsLoading(false);
-          // Redirigir basado en el resultado de la operación asíncrona
+          setIsVerifyingToken(false); // Finaliza la verificación del token
           if (shouldRedirectToHome) {
             history.push('/');
           } else {
@@ -80,20 +80,24 @@ function App() {
       } else {
         setLoggedIn(false);
         setIsLoading(false);
-        history.push('/signin'); // Redirige si no hay token
+        setIsVerifyingToken(false); // Finaliza la verificación del token
+        history.push('/signin');
       }
     };
     tokenCheck();
   }, [history, fetchCards, setLoggedIn, setCurrentUser, setToken]);
 
   // Cerrar sesión
-  const cerrarSesion = useCallback(() => {
-    localStorage.removeItem('token');
-    setLoggedIn(false);
-    setCurrentUser({});
-    setIsMobileOpen(false);
-    history.push('/signin');
-  }, [setLoggedIn, setCurrentUser, setIsMobileOpen, history]);
+  const cerrarSesion = () => {
+    if (!isVerifyingToken) {
+      // Solo permite cerrar sesión si no se está verificando el token
+      localStorage.removeItem('token');
+      setLoggedIn(false);
+      setCurrentUser({});
+      setIsMobileOpen(false);
+      history.push('/signin');
+    }
+  };
 
   async function handleCardLike(card) {
     // Verifica una vez más si a esta tarjeta ya le han dado like
@@ -215,6 +219,7 @@ function App() {
               setLoggedIn={setLoggedIn}
               message={message}
               setMessage={setMessage}
+              onClose={closeAllPopups}
             />
           </Route>
           <ProtectedRoute

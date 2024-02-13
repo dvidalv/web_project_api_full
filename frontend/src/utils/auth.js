@@ -1,4 +1,3 @@
-// export const BASE_URL = 'localhost:3000';
 import url from '../utils/constants';
 export const BASE_URL = url;
 
@@ -28,22 +27,7 @@ export const authorize = (email, password) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then((res) => {
-      return res.token;
-    })
-    .catch((error) => {
-      console.error(
-        'There has been a problem with your fetch operation:',
-        error
-      );
-    });
+  });
 };
 
 // comprueba el token la validez del token

@@ -4,7 +4,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useEffect, useState, useContext } from 'react';
 import { authorize } from '../utils/auth';
 
-function Login({ setLoggedIn, setMessage, message }) {
+function Login({ setLoggedIn, setMessage, message, onClose }) {
   const { setIsMobileOpen, setToken } = useContext(CurrentUserContext);
 
   const history = useHistory();
@@ -19,7 +19,23 @@ function Login({ setLoggedIn, setMessage, message }) {
     e.preventDefault();
     const { email, password } = formData;
     try {
-      const token = await authorize(email, password);
+      const token = await authorize(email, password)
+        .then((response) => {
+          if (!response.ok) {
+            setPopOpenFail(true);
+            setMessage('Password o Email incorrectos');
+          }
+          return response.json();
+        })
+        .then((res) => {
+          return res.token;
+        })
+        .catch((error) => {
+          console.error(
+            'There has been a problem with your fetch operation:',
+            error
+          );
+        });
       if (token) {
         setToken(token);
         setMessage(`Bienvenido!`);
