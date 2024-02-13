@@ -87,14 +87,17 @@ function App() {
   }, [history, fetchCards, setLoggedIn, setCurrentUser, setToken]);
 
   // Cerrar sesión
-  const cerrarSesion = () => {
-    localStorage.removeItem('token');
-    setToken('');
-    setLoggedIn(false);
-    setCurrentUser({});
-    setIsMobileOpen(false);
-    history.push('/signin');
-  };
+  useEffect(() => {
+    const cerrarSesion = () => {
+      localStorage.removeItem('token');
+      setToken('');
+      setLoggedIn(false);
+      setCurrentUser({});
+      setIsMobileOpen(false);
+      history.push('/signin');
+    };
+    cerrarSesion();
+  }, [setToken, setLoggedIn, setCurrentUser, setIsMobileOpen, history]);
 
   async function handleCardLike(card) {
     // Verifica una vez más si a esta tarjeta ya le han dado like
