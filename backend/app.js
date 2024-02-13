@@ -30,14 +30,20 @@ app.use(requestLogger); // registrar todas las solicitudes HTTP
 app.use(morgan('dev'));
 
 // Opciones de CORS para permitir solicitudes de ciertos orígenes
+// const corsOptions = {
+//   origin: [
+//     'http://localhost:3000',
+//     'http://localhost:3001',
+//     'https://api.alrededorusa.mooo.com',
+//     'https://alrededorusa.mooo.com',
+//     'https://www.alrededorusa.mooo.com',
+//   ], // Asegúrate de incluir aquí el origen de tu frontend
+//   credentials: true, // Para permitir cookies de sesión en las solicitudes entre dominios
+//   allowedHeaders: 'Content-Type, Authorization', // Para permitir el token de autorización en las solicitudes
+//   allowedMethods: 'GET, POST, PATCH, PUT, DELETE, OPTIONS', // Para permitir los métodos HTTP
+// };
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'https://api.alrededorusa.mooo.com',
-    'https://alrededorusa.mooo.com',
-    'https://www.alrededorusa.mooo.com',
-  ], // Asegúrate de incluir aquí el origen de tu frontend
+  origin: true, // acepta cualquier origen
   credentials: true, // Para permitir cookies de sesión en las solicitudes entre dominios
   allowedHeaders: 'Content-Type, Authorization', // Para permitir el token de autorización en las solicitudes
   allowedMethods: 'GET, POST, PATCH, PUT, DELETE, OPTIONS', // Para permitir los métodos HTTP
