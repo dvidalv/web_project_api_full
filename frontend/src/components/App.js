@@ -89,6 +89,7 @@ function App() {
   // Cerrar sesión
   const cerrarSesion = () => {
     localStorage.removeItem('token');
+    setToken('');
     setLoggedIn(false);
     setCurrentUser({});
     setIsMobileOpen(false);
