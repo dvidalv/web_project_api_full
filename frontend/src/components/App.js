@@ -104,7 +104,6 @@ function App() {
   async function handleCardLike(card) {
     // Verifica una vez más si a esta tarjeta ya le han dado like
     const isLiked = card.likes.some((i) => i === currentUser._id);
-    console.log(isLiked);
 
     try {
       const newCard = await api.changeLikeCardStatus(card._id, !isLiked, token);
@@ -171,8 +170,6 @@ function App() {
   const handleUpdateAvatar = async (avatar) => {
     try {
       const updateAvatar = await api.setUserAvatar(avatar, token);
-      // console.log(updateAvatar);
-
       setCurrentUser(updateAvatar.user);
     } catch (error) {
       console.log(error);

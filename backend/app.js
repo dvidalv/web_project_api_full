@@ -87,5 +87,5 @@ app.use((err, req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`El servidor esta corriendo en el puerto ${PORT}`);
+  // console.log(`El servidor esta corriendo en el puerto ${PORT}`);
 });
