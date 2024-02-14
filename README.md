@@ -47,7 +47,7 @@ Sigue estos pasos para configurar el entorno de desarrollo.
 
 Usar este proyecto es bastante sencillo. Sigue estos pasos para comenzar:
 
-1. Abre la aplicación en tu navegador web.
+1. Abre la aplicación en tu navegador web y ve a [https://www.alrededorusa.mooo.com](https://www.alrededorusa.mooo.com).
 2. Inicia sesión con tu cuenta de usuario.
 3. Explora las diferentes secciones de la aplicación.
 4. Crea, edita y elimina tarjetas.

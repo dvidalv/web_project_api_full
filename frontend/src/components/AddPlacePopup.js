@@ -31,7 +31,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit }) {
         id="nombre-input"
         className="popup__input popup__input_nombre"
         type="text"
-        placeholder="Nombre"
+        placeholder="Lugar"
         minLength="2"
         maxLength="40"
         required
@@ -42,7 +42,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit }) {
         id="aboutMe-input"
         className="popup__input popup__input_about-me"
         type="text"
-        placeholder="Acerca de mi"
+        placeholder="Link de la imagen"
         minLength="2"
         maxLength="200"
         required

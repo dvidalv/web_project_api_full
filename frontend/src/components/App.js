@@ -43,7 +43,7 @@ function App() {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [token]
+    [token],
   );
 
   // Verificar el token
