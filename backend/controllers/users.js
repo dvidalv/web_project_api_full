@@ -23,9 +23,8 @@ const getCurrentUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { name, about, avatar, email, password } = req.body; // Obtenemos los datos del usuario del body de la petición
+    const { name, about, avatar, email, password } = req.body;
     const newUser = {
-      // Creamos un nuevo usuario
       name,
       about,
       avatar,
@@ -57,14 +56,22 @@ const createUser = async (req, res) => {
   }
 };
 
+const generateAuthToken = async (user) => {
+  const token = await jwt.sign(
+    { _id: user._id.toString() },
+    process.env.JWT_SECRET,
+    { expiresIn: '7d' },
+  );
+  return token;
+};
+
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body; // Obtenemos los datos del usuario del body de la petición
-    const user = await User.findUserByCredentials(email, password); // Buscamos el usuario por email y contraseña
-    const token = await generateAuthToken(user); // Generamos el token
+    const { email, password } = req.body;
+    const user = await User.findUserByCredentials(email, password);
+    const token = await generateAuthToken(user);
 
     return res.status(httpStatus.OK).json({
-      // Devolvemos el usuario y el token
       status: 'success',
       message: 'User logged in',
       token,
@@ -75,17 +82,6 @@ const login = async (req, res) => {
       message: 'Invalid credentials',
     });
   }
-};
-
-const generateAuthToken = async (user) => {
-  // Función para generar el token
-  const token = await jwt.sign(
-    // Generamos el token con jwt.sign
-    { _id: user._id.toString() }, // Pasamos el id del usuario o carga útil
-    process.env.JWT_SECRET, // Pasamos el secret del token
-    { expiresIn: '7d' }, // Token now expires in one week
-  );
-  return token; // Devolvemos el token
 };
 
 const getAllUsers = async (req, res) => {
@@ -156,7 +152,6 @@ const deleteUser = async (req, res) => {
       user,
     });
   } catch (err) {
-    console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       status: 'error',
       message: 'Unexpected error',
@@ -188,7 +183,6 @@ const updateProfile = async (req, res) => {
       user,
     });
   } catch (err) {
-    console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       status: 'error',
       message: 'Unexpected error',
@@ -221,7 +215,6 @@ const updateAvatar = async (req, res) => {
       user,
     });
   } catch (err) {
-    console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       status: 'error',
 

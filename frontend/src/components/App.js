@@ -1,8 +1,9 @@
+import { useEffect, useState, useCallback } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import Main from './Main';
 import Header from './Header';
 import Footer from './Footer';
-import { useEffect, useState, useCallback } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -13,7 +14,6 @@ import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 import { checkToken } from '../utils/auth';
-import { AnimatePresence } from 'framer-motion';
 
 function App() {
   const history = useHistory();
@@ -36,8 +36,8 @@ function App() {
   const fetchCards = useCallback(
     async (token) => {
       try {
-        const cards = await api.getInitialCards(token);
-        setCards(cards);
+        const data = await api.getInitialCards(token);
+        setCards(data);
       } catch (err) {
         // console.log(err);
       }
@@ -48,11 +48,13 @@ function App() {
 
   // Verificar el token
   useEffect(() => {
-    // setIsLoading(true);
+    let token;
     setIsVerifyingToken(true); // Inicia la verificación del token
     const tokenCheck = async () => {
       let shouldRedirectToHome = false;
-      const token = localStorage.getItem('token');
+      // Directly use the token variable from the upper scope if needed
+      // Or if you're trying to update it from localStorage, do it like this:
+      token = localStorage.getItem('token'); // Assuming you want to update the upper scope's token
       if (token) {
         try {
           const tokenIsValid = await checkToken(token);

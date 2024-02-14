@@ -13,7 +13,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit }) {
       link: linkRef.current.value,
     });
   }
-  
+
   useEffect(() => {
     nameRef.current.value = '';
     linkRef.current.value = '';

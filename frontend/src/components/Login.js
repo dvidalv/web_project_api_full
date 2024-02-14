@@ -52,15 +52,13 @@ function Login({ setLoggedIn, setMessage, message, onClose }) {
 
   useEffect(() => {
     if (popOpenSuccess) {
-      setTimeout(() => {
-        setPopOpenSuccess(false);
-        setFormData({
-          email: '',
-          password: '',
-        });
-        setLoggedIn(true);
-        history.push('/');
-      }, 3000);
+      setPopOpenSuccess(false);
+      setFormData({
+        email: '',
+        password: '',
+      });
+      setLoggedIn(true);
+      history.push('/');
     }
   }, [popOpenSuccess, history, setLoggedIn]);
 
