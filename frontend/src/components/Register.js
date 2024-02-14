@@ -21,7 +21,7 @@ function Register({ setMessage, message }) {
 
   useEffect(() => {
     if (popOpenSuccess) {
-      setTimeout(() => {
+      // setTimeout(() => {
         setPopOpenSuccess(false);
         setFormData({
           name: '',
@@ -32,7 +32,7 @@ function Register({ setMessage, message }) {
         });
 
         history.push('/signin');
-      }, 3000);
+      // }, 3000);
     }
   }, [popOpenSuccess, history]);
 
